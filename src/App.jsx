@@ -5,6 +5,8 @@ import 'leaflet/dist/leaflet.css';
 import markerIconPng from "leaflet/dist/images/marker-icon.png";
 import markerShadowPng from "leaflet/dist/images/marker-shadow.png";
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+
 // Pengaturan Default Marker Objek
 const DefaultIcon = L.icon({
   iconUrl: markerIconPng,
@@ -105,7 +107,7 @@ function PendudukMiskinForm({ selectedLat, selectedLng, onSaveSuccess, onClose }
     };
 
     try {
-      const response = await fetch('http://localhost:5000/api/miskin/create', {
+      const response = await fetch(`${API_URL}/api/miskin/create`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
@@ -235,10 +237,10 @@ function App() {
   const [formIbadah, setFormIbadah] = useState({ nama: '', jenis: 'masjid', kontak: '', radius: 300 });
 
   const loadAllData = () => {
-    fetch('http://localhost:5000/api/jalan').then(res => res.json()).then(data => setDataJalan(data));
-    fetch('http://localhost:5000/api/area').then(res => res.json()).then(data => setDataArea(data));
-    fetch('http://localhost:5000/api/ibadah').then(res => res.json()).then(data => setDataIbadah(data));
-    fetch('http://localhost:5000/api/miskin').then(res => res.json()).then(data => setDataMiskin(data));
+    fetch(`${API_URL}/api/jalan`).then(res => res.json()).then(data => setDataJalan(data));
+    fetch(`${API_URL}/api/area`).then(res => res.json()).then(data => setDataArea(data));
+    fetch(`${API_URL}/api/ibadah`).then(res => res.json()).then(data => setDataIbadah(data));
+    fetch(`${API_URL}/api/miskin`).then(res => res.json()).then(data => setDataMiskin(data));
   };
 
   useEffect(() => { loadAllData(); }, []);
@@ -301,7 +303,7 @@ function App() {
 
   const submitJalanForm = (e) => {
     e.preventDefault();
-    fetch('http://localhost:5000/api/jalan/create', {
+    fetch(`${API_URL}/api/jalan/create`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ ...formJalan, coords: drawCoords })
@@ -316,7 +318,7 @@ function App() {
 
   const submitAreaForm = (e) => {
     e.preventDefault();
-    fetch('http://localhost:5000/api/area/create', {
+    fetch(`${API_URL}/api/area/create`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ ...formArea, coords: drawCoords })
@@ -331,7 +333,7 @@ function App() {
 
   const submitIbadahForm = (e) => {
     e.preventDefault();
-    fetch('http://localhost:5000/api/ibadah/create', {
+    fetch(`${API_URL}/api/ibadah/create`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ ...formIbadah, lat: drawCoords[0][0], lng: drawCoords[0][1] })

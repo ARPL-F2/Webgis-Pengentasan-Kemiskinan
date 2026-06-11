@@ -4,6 +4,7 @@ import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import markerIconPng from "leaflet/dist/images/marker-icon.png";
 import markerShadowPng from "leaflet/dist/images/marker-shadow.png";
+const API_URL = import.meta.env.VITE_API_URL;
 
 // Setup Icons
 const DefaultIcon = L.icon({ iconUrl: markerIconPng, shadowUrl: markerShadowPng, iconSize: [25, 41], iconAnchor: [12, 41], popupAnchor: [1, -34] });
@@ -95,10 +96,10 @@ function User() {
   const [dataMiskin, setDataMiskin] = useState([]);
 
   useEffect(() => {
-    fetch('http://localhost:5000/api/jalan').then(res => res.json()).then(setDataJalan);
-    fetch('http://localhost:5000/api/area').then(res => res.json()).then(setDataArea);
-    fetch('http://localhost:5000/api/ibadah').then(res => res.json()).then(setDataIbadah);
-    fetch('http://localhost:5000/api/miskin').then(res => res.json()).then(setDataMiskin);
+    fetch(`${API_URL}/api/jalan`).then(res => res.json()).then(setDataJalan);
+    fetch(`${API_URL}/api/area`).then(res => res.json()).then(setDataArea);
+    fetch(`${API_URL}/api/ibadah`).then(res => res.json()).then(setDataIbadah);
+    fetch(`${API_URL}/api/miskin`).then(res => res.json()).then(setDataMiskin);
   }, []);
 
   return (
