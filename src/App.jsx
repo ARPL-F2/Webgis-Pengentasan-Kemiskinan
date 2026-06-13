@@ -6,7 +6,7 @@ import markerIconPng from "leaflet/dist/images/marker-icon.png";
 import markerShadowPng from "leaflet/dist/images/marker-shadow.png";
 //import App from './App.jsx'; // Dashboard utama
 import Landing from './Landing.jsx'; // Halaman landing
-import User from './User.jsx'; // Halaman manajemen user / profil
+import User from './user.jsx'; // Halaman manajemen user / profil
 import 'leaflet/dist/leaflet.css'; // Dependensi peta WebGIS
 
 ReactDOM.createRoot(document.getElementById('root')).render(
