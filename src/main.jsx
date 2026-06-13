@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import App from './App.jsx'; // This will become your main dashboard
 import Landing from './Landing.jsx'; // Make sure this path is correct
-import User from './User.jsx'; // 1. IMPORT YOUR NEW FILE HERE
+import User from './user.jsx'; // 1. IMPORT YOUR NEW FILE HERE
 import './index.css';
 import 'leaflet/dist/leaflet.css';
 
