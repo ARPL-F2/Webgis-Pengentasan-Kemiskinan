@@ -4,7 +4,7 @@ import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import markerIconPng from "leaflet/dist/images/marker-icon.png";
 import markerShadowPng from "leaflet/dist/images/marker-shadow.png";
-import App from './App.jsx'; // Dashboard utama
+//import App from './App.jsx'; // Dashboard utama
 import Landing from './Landing.jsx'; // Halaman landing
 import User from './User.jsx'; // Halaman manajemen user / profil
 import 'leaflet/dist/leaflet.css'; // Dependensi peta WebGIS
