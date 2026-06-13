@@ -4,7 +4,8 @@ import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import markerIconPng from "leaflet/dist/images/marker-icon.png";
 import markerShadowPng from "leaflet/dist/images/marker-shadow.png";
-const API_URL = import.meta.env.VITE_API_URL;
+//const API_URL = import.meta.env.VITE_API_URL;
+const API_URL = "";
 
 // Setup Icons
 const DefaultIcon = L.icon({ iconUrl: markerIconPng, shadowUrl: markerShadowPng, iconSize: [25, 41], iconAnchor: [12, 41], popupAnchor: [1, -34] });
@@ -95,11 +96,12 @@ function User() {
   const [dataIbadah, setDataIbadah] = useState([]);
   const [dataMiskin, setDataMiskin] = useState([]);
 
+  // 2. Ganti useEffect Anda dengan ini:
   useEffect(() => {
-    fetch(`${API_URL}/api/jalan`).then(res => res.json()).then(setDataJalan);
-    fetch(`${API_URL}/api/area`).then(res => res.json()).then(setDataArea);
-    fetch(`${API_URL}/api/ibadah`).then(res => res.json()).then(setDataIbadah);
-    fetch(`${API_URL}/api/miskin`).then(res => res.json()).then(setDataMiskin);
+    fetch(`/api/jalan`).then(res => res.json()).then(setDataJalan);
+    fetch(`/api/area`).then(res => res.json()).then(setDataArea);
+    fetch(`/api/ibadah`).then(res => res.json()).then(setDataIbadah);
+    fetch(`/api/miskin`).then(res => res.json()).then(setDataMiskin);
   }, []);
 
   return (
