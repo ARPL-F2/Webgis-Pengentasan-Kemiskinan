@@ -9,26 +9,6 @@ import Landing from './Landing.jsx'; // Halaman landing
 import User from './user.jsx'; // Halaman manajemen user / profil
 import 'leaflet/dist/leaflet.css'; // Dependensi peta WebGIS
 
-ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
-    <BrowserRouter>
-      <Routes>
-        {/* Rute untuk halaman awal (Landing Page) */}
-        <Route path="/" element={<Landing />} />
-        
-        {/* Rute untuk halaman Dashboard WebGIS */}
-        <Route path="/dashboard" element={<App />} />
-        
-        {/* Rute untuk halaman User */}
-        <Route path="/user" element={<User />} />
-        
-        {/* Alihkan rute yang tidak dikenal kembali ke Landing Page */}
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
-    </BrowserRouter>
-  </React.StrictMode>
-);
-
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
 // Pengaturan Default Marker Objek
