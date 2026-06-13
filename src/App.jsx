@@ -9,7 +9,8 @@ import Landing from './Landing.jsx'; // Halaman landing
 import User from './user.jsx'; // Halaman manajemen user / profil
 import 'leaflet/dist/leaflet.css'; // Dependensi peta WebGIS
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+//const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+const API_URL = ' ';
 
 // Pengaturan Default Marker Objek
 const DefaultIcon = L.icon({
@@ -241,10 +242,26 @@ function App() {
   const [formIbadah, setFormIbadah] = useState({ nama: '', jenis: 'masjid', kontak: '', radius: 300 });
 
   const loadAllData = () => {
-    fetch(`${API_URL}/api/jalan`).then(res => res.json()).then(data => setDataJalan(data));
-    fetch(`${API_URL}/api/area`).then(res => res.json()).then(data => setDataArea(data));
-    fetch(`${API_URL}/api/ibadah`).then(res => res.json()).then(data => setDataIbadah(data));
-    fetch(`${API_URL}/api/miskin`).then(res => res.json()).then(data => setDataMiskin(data));
+    // Ganti semua fetch lama Anda agar menggunakan pembatas slash `/` yang benar:
+    fetch(`${API_URL}/api/jalan`) // <-- Perhatikan ada slash sebelum api
+      .then(res => res.json())
+      .then(data => setDataJalan(Array.isArray(data) ? data : []))
+      .catch(() => setDataJalan([]));
+
+    fetch(`${API_URL}/api/area`)
+      .then(res => res.json())
+      .then(data => setDataArea(Array.isArray(data) ? data : []))
+      .catch(() => setDataArea([]));
+
+    fetch(`${API_URL}/api/ibadah`)
+      .then(res => res.json())
+      .then(data => setDataIbadah(Array.isArray(data) ? data : []))
+      .catch(() => setDataIbadah([]));
+
+    fetch(`${API_URL}/api/miskin`)
+      .then(res => res.json())
+      .then(data => setDataMiskin(Array.isArray(data) ? data : []))
+      .catch(() => setDataMiskin([]));
   };
 
   useEffect(() => { loadAllData(); }, []);
