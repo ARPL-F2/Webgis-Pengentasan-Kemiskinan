@@ -3,6 +3,7 @@ from flask_cors import CORS
 import psycopg2
 import psycopg2.extras
 import json
+import os
 
 app = Flask(__name__)
 # Mengizinkan semua origin (termasuk port 5173 milik React) untuk mengakses API
@@ -11,8 +12,11 @@ CORS(app, resources={r"/api/*": {"origins": "*"}})
 # =========================================================================
 # KONEKSI DATABASE NEON (SERVERLESS POSTGRESQL)
 # =========================================================================
-# Ganti string di bawah ini dengan Connection String asli dari dashboard Neon kamu!
-NEON_DB_URI = "postgresql://neondb_owner:npg_l27gXGaeChPq@ep-quiet-morning-aobokj6d.c-2.ap-southeast-1.aws.neon.tech/neondb?sslmode=require"
+# Membaca dari environment variable Vercel, jika di lokal baru pakai string hardcode
+NEON_DB_URI = os.getenv(
+    "DATABASE_URL", 
+    "postgresql://neondb_owner:npg_l27gXGaeChPq@ep-quiet-morning-aobokj6d.c-2.ap-southeast-1.aws.neon.tech/neondb?sslmode=require"
+)
 
 def get_db_connection():
     return psycopg2.connect(NEON_DB_URI)
