@@ -1,4 +1,4 @@
 Flask==3.1.2
 Flask-Cors==6.0.1
-psycopg2-binary==3.1.18
+psycopg[binary]==3.1.18
 gunicorn==23.0.0
