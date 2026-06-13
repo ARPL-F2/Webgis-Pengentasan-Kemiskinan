@@ -56,60 +56,79 @@ def get_jalan():
     conn = get_db_connection()
     cursor = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
     
-    # Mengambil field panjang yang sekarang sudah terisi otomatis dalam satuan meter
-    cursor.execute("SELECT id, nama, status, panjang, ST_AsGeoJSON(geom) as geom_json FROM jalan")
-    rows = cursor.fetchall()
-    
-    for row in rows:
-        if row['geom_json']:
-            row['geom'] = json.loads(row['geom_json'])
-        del row['geom_json']
+    try:
+        cursor.execute("SELECT id, nama, status, panjang, ST_AsGeoJSON(geom) as geom_json FROM jalan")
+        rows = cursor.fetchall()
         
-        # Opsional: Membulatkan nilai panjang jalan menjadi 2 angka di belakang koma demi estetika UI
-        if row['panjang'] is not None:
-            row['panjang'] = round(row['panjang'], 2)
+        for row in rows:
+            if row['geom_json']:
+                row['geom'] = json.loads(row['geom_json'])
+            del row['geom_json']
             
-    cursor.close()
-    conn.close()
-    return jsonify(rows)
+            if row['panjang'] is not None:
+                row['panjang'] = round(row['panjang'], 2)
+        response = rows
+    except Exception as e:
+        response = [] # Mengamankan peta React jika tabel jalan bermasalah
+        print(f"ERROR: {e}")
+    finally:
+        cursor.close()
+        conn.close()
+        
+    return jsonify(response)
 
 @app.route('/api/area', methods=['GET'])
 def get_area():
     conn = get_db_connection()
     cursor = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
     
-    # Mengambil semua field data area dari database
-    cursor.execute("SELECT id, nama, luas, ST_AsGeoJSON(geom) as geom_json FROM area")
-    rows = cursor.fetchall()
-    
-    for row in rows:
-        if row['geom_json']:
-            row['geom'] = json.loads(row['geom_json'])
-        del row['geom_json']
+    try:
+        # Mengambil semua field data area dari database
+        cursor.execute("SELECT id, nama, luas, ST_AsGeoJSON(geom) as geom_json FROM area")
+        rows = cursor.fetchall()
         
-        # Opsional: Membulatkan nilai luas wilayah menjadi 2 angka di belakang koma untuk merapikan UI
-        if row['luas'] is not None:
-            row['luas'] = round(row['luas'], 2)
+        for row in rows:
+            if row['geom_json']:
+                row['geom'] = json.loads(row['geom_json'])
+            del row['geom_json']
             
-    cursor.close()
-    conn.close()
-    return jsonify(rows)
+            # Opsional: Membulatkan nilai luas wilayah menjadi 2 angka di belakang koma untuk merapikan UI
+            if row['luas'] is not None:
+                row['luas'] = round(row['luas'], 2)
+                
+        response = rows
+    except Exception as e:
+        response = []  # Jaring penyelamat: jika database bermasalah, kirim array kosong agar React tidak crash
+        print(f"ERROR: Failed to fetch area data: {e}")
+    finally:
+        cursor.close()
+        conn.close()
+        
+    return jsonify(response)
 
 @app.route('/api/ibadah', methods=['GET'])
 def get_ibadah():
     conn = get_db_connection()
     cursor = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
-    cursor.execute("SELECT id, nama, jenis, kontak, radius, ST_AsGeoJSON(geom) as geom_json FROM rumah_ibadah")
-    rows = cursor.fetchall()
     
-    for row in rows:
-        if row['geom_json']:
-            row['geom'] = json.loads(row['geom_json'])
-        del row['geom_json']
+    try:
+        cursor.execute("SELECT id, nama, jenis, kontak, radius, ST_AsGeoJSON(geom) as geom_json FROM rumah_ibadah")
+        rows = cursor.fetchall()
         
-    cursor.close()
-    conn.close()
-    return jsonify(rows)
+        for row in rows:
+            if row['geom_json']:
+                row['geom'] = json.loads(row['geom_json'])
+            del row['geom_json']
+            
+        response = rows
+    except Exception as e:
+        response = []  # Jaring penyelamat: mengembalikan array kosong agar frontend tetap aman
+        print(f"ERROR: Failed to fetch rumah ibadah data: {e}")
+    finally:
+        cursor.close()
+        conn.close()
+        
+    return jsonify(response)
 
 @app.route('/api/miskin', methods=['GET'])
 def get_miskin():
@@ -137,7 +156,9 @@ def get_miskin():
                 
         response = rows
     except Exception as e:
-        response = {"status": "error", "message": str(e)}
+        # PENTING: Mengembalikan array kosong [] sebagai jaring penyelamat (fallback)
+        # agar React Frontend Anda tidak crash menjadi layar hitam jika database Neon/Supabase overload.
+        response = [] 
         print(f"ERROR: Failed to fetch penduduk miskin: {e}")
     finally:
         cursor.close()
